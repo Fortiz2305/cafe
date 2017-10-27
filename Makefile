@@ -7,4 +7,4 @@ shell: build
 	docker run --rm -it -v ${PWD}:/code ${IMAGE_NAME} /bin/bash
 
 unit_test: build
-	docker run --rm -it -v ${PWD}:/code ${IMAGE_NAME} bash -c "TESTING=true mamba -f documentation tests/unit/*"
+	docker run --rm -it -v ${PWD}:/code ${IMAGE_NAME} bash -c "TESTING=true mamba -f documentation tests/unit/**/**"
