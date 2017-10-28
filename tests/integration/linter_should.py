@@ -4,7 +4,7 @@ import pep8
 from expects import equal, expect
 from tests.mamba_reserved_words import description, it
 
-CHECKED_DIRS = ['commands', 'events', 'domain', 'tests']
+CHECKED_DIRS = ['commands', 'domain_events', 'domain', 'tests']
 
 
 def root_path():
