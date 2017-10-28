@@ -1,5 +1,5 @@
 from expects import expect, be_a, have_properties, raise_error
-from doublex import Spy
+from doublex import Spy, Stub, ANY_ARG
 from doublex_expects import have_been_called_with
 
 from tests.mamba_reserved_words import before, context, description, it, self
@@ -11,6 +11,7 @@ from commands.commands import (
 from domain_events.events import TabOpened
 from handlers.tab_handler import TabHandler
 from domain.exceptions import TabNotOpen
+from domain.tab_aggregate import TabAggregate
 
 
 with description('Tab Handler'):
@@ -20,7 +21,7 @@ with description('Tab Handler'):
             self.test_table_number = 10
             self.test_waiter = 'an_irrelevant_waiter'
             self.event_publisher = Spy()
-            self.handler = TabHandler(self.event_publisher)
+            self.handler = TabHandler(self.event_publisher, Stub())
 
         with it('should publish "TabOpened" event when handling an "OpenTab" command'):
             open_tab_command = OpenTab(
@@ -40,7 +41,13 @@ with description('Tab Handler'):
     with context('When placing Orders'):
         with before.each:
             self.test_id = 'an_irrelevant_id'
+            self.repository = Stub()
+            self.handler = TabHandler(event_publisher=Stub(), repository=self.repository)
+
         with it('Cannot place an order if the tab is not open'):
+            with Stub() as repository:
+                repository.get_tab_by_id(ANY_ARG).returns(TabAggregate(self.test_id))
+            self.handler.repository = repository
             place_order_command = PlaceOrder(
                 tab_id=self.test_id,
                 items_list=['an_irrelevant_item'])
