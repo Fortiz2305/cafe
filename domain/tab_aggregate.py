@@ -1,4 +1,4 @@
-from domain_events.tab_opened import TabOpened
+from domain_events.events import TabOpened
 
 
 class TabAggregate:

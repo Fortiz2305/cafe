@@ -1,12 +1,16 @@
-from expects import expect, be_a, have_properties
+from expects import expect, be_a, have_properties, raise_error
 from doublex import Spy
 from doublex_expects import have_been_called_with
 
 from tests.mamba_reserved_words import before, context, description, it, self
 
-from commands.open_tab import OpenTab
-from domain_events.tab_opened import TabOpened
+from commands.commands import (
+    OpenTab,
+    PlaceOrder
+)
+from domain_events.events import TabOpened
 from handlers.tab_handler import TabHandler
+from domain.exceptions import TabNotOpen
 
 
 with description('Tab Handler'):
@@ -32,3 +36,13 @@ with description('Tab Handler'):
                 'table_number': self.test_table_number,
                 'waiter': self.test_waiter
             })))
+
+    with context('When placing Orders'):
+        with before.each:
+            self.test_id = 'an_irrelevant_id'
+        with it('Cannot place an order if the tab is not open'):
+            place_order_command = PlaceOrder(
+                tab_id=self.test_id,
+                items_list=['an_irrelevant_item'])
+
+            expect(lambda: self.handler.handle_place_order(place_order_command)).to(raise_error(TabNotOpen))
