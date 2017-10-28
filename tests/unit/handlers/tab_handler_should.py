@@ -1,5 +1,5 @@
 from expects import expect, be_a, have_properties
-from doublex import Spy, ANY_ARG
+from doublex import Spy
 from doublex_expects import have_been_called_with
 
 from tests.mamba_reserved_words import before, context, description, it, self
@@ -7,7 +7,6 @@ from tests.mamba_reserved_words import before, context, description, it, self
 from commands.open_tab import OpenTab
 from domain_events.tab_opened import TabOpened
 from handlers.tab_handler import TabHandler
-from domain.tab_aggregate import TabAggregate
 
 
 with description('Tab Handler'):
@@ -17,13 +16,9 @@ with description('Tab Handler'):
             self.test_table_number = 10
             self.test_waiter = 'an_irrelevant_waiter'
             self.event_publisher = Spy()
-            self.repository = Spy()
-            self.handler = TabHandler(self.event_publisher, self.repository)
+            self.handler = TabHandler(self.event_publisher)
 
-        with it('should add "TabOpened" event to event list when sending a "OpenTab" command'):
-            with Spy() as repository:
-                repository.get_tab_by_id(ANY_ARG).returns(TabAggregate(self.test_id))
-            self.handler.repository = repository
+        with it('should publish "TabOpened" event when handling an "OpenTab" command'):
             open_tab_command = OpenTab(
                 tab_id=self.test_id,
                 table_number=self.test_table_number,
