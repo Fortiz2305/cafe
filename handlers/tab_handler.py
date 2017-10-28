@@ -1,4 +1,5 @@
 from domain.tab_aggregate import TabAggregate
+from domain.exceptions import TabNotOpen
 
 
 class TabHandler:
@@ -11,7 +12,7 @@ class TabHandler:
         self.send_uncommited_events(tab)
 
     def handle_place_order(self, place_order_command):
-        pass
+        raise TabNotOpen('Tab should be opened before place an order')
 
     def send_uncommited_events(self, tab):
         for event in tab.uncommited_events:
