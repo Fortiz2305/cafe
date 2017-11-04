@@ -29,7 +29,7 @@ with description('Tab Handler'):
                 table_number=self.test_table_number,
                 waiter=self.test_waiter)
 
-            self.handler.handle_open_tab(open_tab_command)
+            self.handler.handle(open_tab_command)
 
             expect(self.event_publisher.publish).to(have_been_called_with(be_a(TabOpened)))
             expect(self.event_publisher.publish).to(have_been_called_with(have_properties({
@@ -52,4 +52,4 @@ with description('Tab Handler'):
                 tab_id=self.test_id,
                 items_list=['an_irrelevant_item'])
 
-            expect(lambda: self.handler.handle_place_order(place_order_command)).to(raise_error(TabNotOpen))
+            expect(lambda: self.handler.handle(place_order_command)).to(raise_error(TabNotOpen))
