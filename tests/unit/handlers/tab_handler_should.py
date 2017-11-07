@@ -11,7 +11,6 @@ from commands.commands import (
 from domain_events.events import TabOpened
 from handlers.tab_handler import TabHandler
 from domain.exceptions import TabNotOpen
-from domain.tab_aggregate import TabAggregate
 
 
 with description('Tab Handler'):
@@ -46,7 +45,7 @@ with description('Tab Handler'):
 
         with it('Cannot place an order if the tab is not open'):
             with Stub() as repository:
-                repository.get_tab_by_id(ANY_ARG).returns(TabAggregate(self.test_id))
+                repository.get_events_by_id(ANY_ARG).returns([])
             self.handler.repository = repository
             place_order_command = PlaceOrder(
                 tab_id=self.test_id,
