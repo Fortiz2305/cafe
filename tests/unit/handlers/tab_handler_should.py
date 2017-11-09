@@ -45,7 +45,8 @@ with description('Tab Handler'):
         with before.each:
             self.test_id = 'an_irrelevant_id'
             self.repository = Stub()
-            self.tab_handler = TabHandler(event_publisher=Stub(), repository=self.repository)
+            self.event_publisher = Spy()
+            self.tab_handler = TabHandler(self.event_publisher, self.repository)
 
         with it('Cannot place an order if the tab is not open'):
             with Stub() as repository:

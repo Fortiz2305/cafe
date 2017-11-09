@@ -33,6 +33,7 @@ class TabHandler:
         tab_events = self.repository.get_events_by_id(place_order_command.tab_id)
         tab = TabAggregate.apply(tab_events)
         tab.place_order(items_list=place_order_command.items_list)
+        self.send_uncommited_events(tab)
 
     def send_uncommited_events(self, tab):
         for event in tab.uncommited_events:
