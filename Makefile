@@ -8,3 +8,5 @@ shell: build
 
 unit_test: build
 	docker run --rm -it -v ${PWD}:/code ${IMAGE_NAME} bash -c "TESTING=true mamba -f documentation tests/unit/**/**"
+
+test: build unit_test
